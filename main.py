@@ -4,8 +4,8 @@ import sys
 import argparse
 
 
-def get_images():
-    file_names = os.listdir('sources')
+def get_images(sub_dir):
+    file_names = os.listdir(f'sources/{sub_dir}')
     return file_names
 
 
@@ -30,17 +30,19 @@ def format_image(image, start_x, end_x, start_y, end_y):
 
 def main(arguments):
     parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'type', type=str, help="cards type (spells, dungeons, heroes)")
     parser.add_argument('start_x', type=int, help="starting pixel x pos")
     parser.add_argument('start_y', type=int, help="starting pixel y pos")
     parser.add_argument('end_x', type=int, help="ending pixel x pos")
     parser.add_argument('end_y', type=int, help="ending pixel y pos")
     args = parser.parse_args()
 
-    images_names = get_images()
+    images_names = get_images(args.type)
     for image_name in images_names:
-        img = Image.open(f'sources/{image_name}')
+        img = Image.open(f'sources/{args.type}/{image_name}')
         format_image(img, args.start_x, args.end_x, args.start_y, args.end_y)
-        img.save(f"outputs/{image_name}")
+        img.save(f"outputs/{args.type}/{image_name}")
 
 
 if __name__ == '__main__':
@@ -48,5 +50,5 @@ if __name__ == '__main__':
 
 
 # Pixels for different images types (start_x, start_y, end_x, end_y):
-# (115, 236, 607, 671) - spell card
+# (114, 236, 607, 674) - spell card
 # (78, 231, 667, 654) - hero card
